@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>Azurill → Marill → Azumarill</title>
+<meta name="description" content="Personal Pokémon TCG collection tracker">
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#4FB8DB">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Azumarill Dex">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon-192.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="app-header" id="appHeader">
+  <div class="header-inner">
+    <button class="icon-btn back-btn hidden" id="backBtn" aria-label="Back">‹</button>
+    <h1 class="header-title" id="headerTitle">Azurill → Marill → Azumarill</h1>
+    <button class="icon-btn search-toggle-btn" id="searchToggleBtn" aria-label="Search">🔍</button>
+  </div>
+  <div class="header-search hidden" id="headerSearch">
+    <input type="text" id="searchInput" placeholder="Search cards, sets, numbers…" autocomplete="off">
+    <button id="clearSearchBtn" class="text-btn">Clear</button>
+  </div>
+</header>
+
+<main id="mainScroll">
+
+  <section class="screen" id="screen-home">
+    <div class="migration-banner hidden" id="migrationBanner"></div>
+
+    <div class="hero-progress-card">
+      <div class="hero-title-row">
+        <span class="hero-chain">🔵 Azurill <span class="chain-arrow">→</span> Marill <span class="chain-arrow">→</span> Azumarill</span>
+      </div>
+      <div class="hero-progress-row">
+        <div class="ring-wrap">
+          <svg viewBox="0 0 120 120" class="progress-ring">
+            <circle cx="60" cy="60" r="52" class="ring-track"></circle>
+            <circle cx="60" cy="60" r="52" class="ring-fill" id="homeRingFill"></circle>
+          </svg>
+          <div class="ring-label">
+            <span class="ring-pct" id="homePct">0%</span>
+            <span class="ring-sub">Core</span>
+          </div>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat-main"><span id="homeOwnedCount">0</span> / <span id="homeTotalCount">257</span></div>
+          <div class="hero-stat-label">Core cards owned</div>
+          <div class="hero-mini-stats" id="homeMiniStats"></div>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-heading">Your family tree</h2>
+    <div class="species-tiles" id="speciesTiles"></div>
+
+    <h2 class="section-heading">Language progress</h2>
+    <div class="lang-progress-list" id="langProgressList"></div>
+
+    <h2 class="section-heading">Special Collections</h2>
+    <div class="specials-preview" id="specialsPreview"></div>
+
+    <h2 class="section-heading">Recent activity</h2>
+    <div class="recent-list" id="recentActivity">
+      <p class="empty-hint">Cards you mark OWNED or ORDERED will show up here.</p>
+    </div>
+  </section>
+
+  <section class="screen" id="screen-collection">
+    <div class="filter-chip-row" id="speciesChipRow">
+      <button class="chip chip-active" data-species-filter="all">All</button>
+      <button class="chip" data-species-filter="Azurill">Azurill</button>
+      <button class="chip" data-species-filter="Marill">Marill</button>
+      <button class="chip" data-species-filter="Azumarill">Azumarill</button>
+    </div>
+    <div class="collection-toolbar">
+      <button class="pill-btn" id="openFiltersBtn">⚙️ Filters <span class="filter-count hidden" id="filterCountBadge">0</span></button>
+      <button class="pill-btn" id="huntNextBtn">🎯 Hunt Next</button>
+      <div class="toolbar-count" id="collectionResultCount">257 cards</div>
+    </div>
+    <div class="active-filter-tags" id="activeFilterTags"></div>
+    <div class="card-grid" id="collectionGrid"></div>
+    <p class="empty-hint hidden" id="collectionEmptyHint">No cards match these filters. Try clearing a few.</p>
+  </section>
+
+  <section class="screen" id="screen-specials">
+    <p class="screen-intro">Mini collections inside the family — tap one to see just those cards.</p>
+    <div class="specials-grid" id="specialsGrid"></div>
+
+    <h2 class="section-heading">Global Extras <span class="section-heading-note">optional, doesn't affect Core %</span></h2>
+    <p class="screen-intro">Translated duplicates and other bonus language copies you want to track for fun. The spreadsheet doesn't list specific Global Extra cards — add your own below as you find them.</p>
+    <div class="card-grid" id="globalExtrasGrid"></div>
+    <button class="add-card-btn" id="addExtraBtn">+ Add a Global Extra</button>
+  </section>
+
+  <section class="screen" id="screen-cameos">
+    <div class="hero-progress-card compact">
+      <div class="hero-progress-row">
+        <div class="ring-wrap small">
+          <svg viewBox="0 0 120 120" class="progress-ring">
+            <circle cx="60" cy="60" r="52" class="ring-track"></circle>
+            <circle cx="60" cy="60" r="52" class="ring-fill" id="cameoRingFill"></circle>
+          </svg>
+          <div class="ring-label">
+            <span class="ring-pct" id="cameoPct">0%</span>
+          </div>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat-main"><span id="cameoOwnedCount">0</span> / <span id="cameoTotalCount">2</span></div>
+          <div class="hero-stat-label">Bonus cameos found</div>
+          <div class="hero-stat-note">Cameos never count toward Core completion.</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-grid" id="cameoGrid"></div>
+    <button class="add-card-btn" id="addCameoBtn">+ Add a cameo</button>
+  </section>
+
+  <section class="screen" id="screen-more">
+    <div class="more-list">
+      <button class="more-row" id="moreOdditiesBtn">
+        <span class="more-row-icon">🧬</span>
+        <span class="more-row-text">
+          <span class="more-row-title">Bonus Oddities</span>
+          <span class="more-row-sub">Error cards &amp; printing anomalies — never affects Core</span>
+        </span>
+        <span class="more-row-chevron">›</span>
+      </button>
+      <button class="more-row" id="moreSpendingBtn">
+        <span class="more-row-icon">💰</span>
+        <span class="more-row-text">
+          <span class="more-row-title">Spending</span>
+          <span class="more-row-sub">See what you've put into this collection</span>
+        </span>
+        <span class="more-row-chevron">›</span>
+      </button>
+      <button class="more-row" id="moreDataBtn">
+        <span class="more-row-icon">💾</span>
+        <span class="more-row-text">
+          <span class="more-row-title">Backup &amp; Data</span>
+          <span class="more-row-sub">Export, import, and reset your collection</span>
+        </span>
+        <span class="more-row-chevron">›</span>
+      </button>
+      <button class="more-row" id="moreMigrationBtn">
+        <span class="more-row-icon">🔀</span>
+        <span class="more-row-text">
+          <span class="more-row-title">Migration Report</span>
+          <span class="more-row-sub" id="migrationRowSub">Old saved data that needs a manual look</span>
+        </span>
+        <span class="more-row-chevron">›</span>
+      </button>
+      <button class="more-row" id="moreWishlistBtn">
+        <span class="more-row-icon">⭐</span>
+        <span class="more-row-text">
+          <span class="more-row-title">High-priority wishlist</span>
+          <span class="more-row-sub">Cards you've flagged High priority</span>
+        </span>
+        <span class="more-row-chevron">›</span>
+      </button>
+      <button class="more-row" id="moreAboutBtn">
+        <span class="more-row-icon">ℹ️</span>
+        <span class="more-row-text">
+          <span class="more-row-title">About this tracker</span>
+          <span class="more-row-sub">Collection rules &amp; what's tracked</span>
+        </span>
+        <span class="more-row-chevron">›</span>
+      </button>
+    </div>
+  </section>
+
+  <section class="screen" id="screen-hunt">
+    <p class="screen-intro">Collecting help, not investing advice — a few angles on what to chase next.</p>
+    <div id="huntSections"></div>
+  </section>
+
+  <section class="screen" id="screen-oddities">
+    <p class="screen-intro">Documented error cards, printing anomalies, and unusual manufacturing variants. Fun rabbit hole only — never required for Core completion.</p>
+    <div class="card-grid" id="odditiesGrid"></div>
+    <button class="add-card-btn" id="addOddityBtn">+ Add a Bonus Oddity</button>
+  </section>
+
+  <section class="screen" id="screen-migration">
+    <div class="data-card" id="migrationSummaryCard"></div>
+    <div id="migrationReportList"></div>
+  </section>
+
+  <section class="screen" id="screen-wishlist">
+    <p class="screen-intro">Every Core, Cameo, and Global Extra card you've flagged High priority.</p>
+    <div class="card-grid" id="wishlistGrid"></div>
+  </section>
+
+  <section class="screen" id="screen-spending">
+    <div class="spend-total-card">
+      <div class="spend-total-label">Total spent</div>
+      <div class="spend-total-value" id="spendTotalValue">$0.00</div>
+    </div>
+    <h2 class="section-heading">By Pokémon</h2>
+    <div class="spend-by-species" id="spendBySpecies"></div>
+    <h2 class="section-heading">Recent purchases</h2>
+    <div class="recent-list" id="spendRecent">
+      <p class="empty-hint">Purchases you log with a price will appear here.</p>
+    </div>
+  </section>
+
+  <section class="screen" id="screen-data">
+    <div class="data-card">
+      <h3>Dataset</h3>
+      <p id="datasetInfo">Loading…</p>
+    </div>
+    <div class="data-card">
+      <h3>Export backup</h3>
+      <p>A full JSON backup of every card status, price, note, image override, and wishlist flag — keep this safe so your collection never lives on just one phone.</p>
+      <button class="primary-btn" id="exportJsonBtn">Export JSON backup</button>
+    </div>
+    <div class="data-card">
+      <h3>Import backup</h3>
+      <p>Restore from a JSON backup file. You'll see a summary of what's in the file before anything is overwritten. Old-format backups (pre-audit) are migrated automatically the same way old on-device data is.</p>
+      <input type="file" id="importFileInput" accept="application/json" class="hidden">
+      <button class="primary-btn secondary" id="importJsonBtn">Choose backup file…</button>
+    </div>
+    <div class="data-card">
+      <h3>Export spending as CSV</h3>
+      <p>A spreadsheet-friendly list of Core, Cameo, and Global Extra purchases.</p>
+      <button class="primary-btn secondary" id="exportCsvBtn">Export CSV</button>
+    </div>
+    <div class="data-card danger">
+      <h3>Reset all data</h3>
+      <p>Wipes every status, price, and note. Your card database stays — only your personal progress is cleared. (Migration report and legacy backup are kept as a safety net.)</p>
+      <button class="primary-btn danger" id="resetDataBtn">Reset my collection data</button>
+    </div>
+    <div class="data-card">
+      <h3>Storage</h3>
+      <p id="storageInfo">Checking…</p>
+    </div>
+  </section>
+
+  <section class="screen" id="screen-about">
+    <div class="data-card">
+      <h3>Core collection rule</h3>
+      <p>English + Japanese + Spanish are required for every card, plus any other language only when it's a genuinely unique regional release — different card number, artwork, product, stamp, or finish. Straight translations of a Core card are Global Extras, not required.</p>
+    </div>
+    <div class="data-card">
+      <h3>Completion</h3>
+      <p>100% means all 257 Core rows are OWNED. ORDERED doesn't count until it arrives. SKIP never counts as completed.</p>
+    </div>
+    <div class="data-card">
+      <h3>Cameos &amp; Bonus Oddities</h3>
+      <p>Cards that aren't named Azurill, Marill, or Azumarill but feature one of them in the artwork — or documented error/manufacturing variants. Bonus only — they never affect Core completion.</p>
+    </div>
+    <div class="data-card">
+      <h3>Buying approach</h3>
+      <p>For out-of-print cards, buy the single. Sealed product is for fun, not for chasing completion.</p>
+    </div>
+    <div class="data-card">
+      <h3>Source</h3>
+      <p id="aboutSourceInfo">Loading…</p>
+    </div>
+  </section>
+
+</main>
+
+<nav class="bottom-nav" id="bottomNav">
+  <button class="nav-btn nav-active" data-tab="home">
+    <span class="nav-icon">🏠</span><span class="nav-label">Home</span>
+  </button>
+  <button class="nav-btn" data-tab="collection">
+    <span class="nav-icon">📚</span><span class="nav-label">Collection</span>
+  </button>
+  <button class="nav-btn" data-tab="specials">
+    <span class="nav-icon">✨</span><span class="nav-label">Specials</span>
+  </button>
+  <button class="nav-btn" data-tab="cameos">
+    <span class="nav-icon">👀</span><span class="nav-label">Cameos</span>
+  </button>
+  <button class="nav-btn" data-tab="more">
+    <span class="nav-icon">⋯</span><span class="nav-label">More</span>
+  </button>
+</nav>
+
+<div class="modal-overlay hidden" id="cardModalOverlay">
+  <div class="modal-sheet" id="cardModalSheet"></div>
+</div>
+
+<div class="modal-overlay hidden" id="filterModalOverlay">
+  <div class="modal-sheet" id="filterModalSheet"></div>
+</div>
+
+<div class="modal-overlay hidden" id="addExtraOverlay">
+  <div class="modal-sheet" id="addExtraSheet"></div>
+</div>
+
+<div class="modal-overlay hidden" id="importConfirmOverlay">
+  <div class="modal-sheet" id="importConfirmSheet"></div>
+</div>
+
+<div class="toast hidden" id="toast"></div>
+
+<script src="master-data.js"></script>
+<script src="fun-collections-meta.js"></script>
+<script src="legacy-v1-lookup.js"></script>
+<script src="db.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
